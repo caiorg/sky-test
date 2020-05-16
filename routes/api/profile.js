@@ -98,15 +98,34 @@ router.get("/user/:user_id", async (req, res) => {
     }).populate("user", ["nome", "avatar"]);
 
     if (!profile) {
-      res.status(400).json({ msg: "Perfil não encontrado" });
+      return res.status(400).json({ msg: "Perfil não encontrado" });
     }
 
     res.json(profile);
   } catch (err) {
     console.error(err.message);
     if (err.kind == "ObjectId") {
-      res.status(400).json({ msg: "Perfil não encontrado" });
+      return res.status(400).json({ msg: "Perfil não encontrado" });
     }
+
+    res.status(500).send("Erro no servidor");
+  }
+});
+
+// @route   DELETE api/profile
+// @desc    Excluir perfil e respectivo usuário
+// @access  Private
+router.delete("/", auth, async (req, res) => {
+  try {
+    // Excluir perfil do usuário
+    await Profile.findOneAndRemove({ user: req.user.id });
+
+    // Excluir usuário
+    await User.findOneAndRemove({ _id: req.user.id });
+
+    res.json({ msg: "Usuário excluído" });
+  } catch (err) {
+    console.error(err.message);
     res.status(500).send("Erro no servidor");
   }
 });
