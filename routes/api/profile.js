@@ -33,7 +33,10 @@ router.post(
   "/",
   [
     auth,
-    [check("telefones", "Lista de telefones obrigatória").not().isEmpty()],
+    [
+      check("telefones", "Lista de telefones obrigatória").not().isEmpty(),
+      check("endereco", "O endereço é obrigatório").not().isEmpty(),
+    ],
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -41,13 +44,14 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { telefones } = req.body;
+    const { telefones, endereco } = req.body;
 
     const profileFields = {};
 
     profileFields.user = req.user.id;
 
     if (telefones) profileFields.telefones = telefones;
+    if (endereco) profileFields.endereco = endereco;
 
     try {
       let profile = await Profile.findOne({ user: req.user.id });
@@ -90,22 +94,27 @@ router.get("/", async (req, res) => {
 
 // @route   GET api/profile/user/:user_id
 // @desc    Obter o perfi do usuário pelo seu id
-// @access  Public
-router.get("/user/:user_id", async (req, res) => {
+// @access  Private
+router.get("/user/:user_id", auth, async (req, res, next) => {
   try {
     const profile = await Profile.findOne({
       user: req.params.user_id,
     }).populate("user", ["nome", "avatar"]);
 
     if (!profile) {
-      return res.status(400).json({ msg: "Perfil não encontrado" });
+      // return res.status(400).json({ msg: "Perfil não encontrado" });
+      const err = new Error("Perfil não encontrado");
+      err.statusCode = 400;
+      return next(err);
     }
 
     res.json(profile);
   } catch (err) {
     console.error(err.message);
     if (err.kind == "ObjectId") {
-      return res.status(400).json({ msg: "Perfil não encontrado" });
+      const err = new Error("Perfil não encontrado");
+      err.statusCode = 400;
+      return next(err);
     }
 
     res.status(500).send("Erro no servidor");

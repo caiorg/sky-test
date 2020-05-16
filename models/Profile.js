@@ -13,6 +13,25 @@ const TelephoneSchema = new mongoose.Schema({
   },
 });
 
+const AddressSchema = new mongoose.Schema({
+  logradouro: {
+    type: String,
+    required: true,
+  },
+  numero: {
+    type: Number,
+    required: true,
+  },
+  complemento: {
+    type: String,
+  },
+  cep: {
+    type: String,
+    minlength: 9,
+    required: true,
+  },
+});
+
 const ProfileSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
@@ -20,6 +39,9 @@ const ProfileSchema = new mongoose.Schema({
   },
   telefones: {
     type: [TelephoneSchema],
+  },
+  endereco: {
+    type: AddressSchema,
   },
   data_criacao: {
     type: Date,

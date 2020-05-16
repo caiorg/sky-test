@@ -10,7 +10,7 @@ const User = require("../../models/User");
 
 // @route   GET api/auth
 // @desc    Rota de teste
-// @access  Public
+// @access  Private
 router.get("/", auth, async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select("-senha -token");
