@@ -24,6 +24,12 @@ const UserSchema = new mongoose.Schema({
   data_atualizacao: {
     type: Date,
   },
+  ultimo_login: {
+    type: Date,
+  },
+  token: {
+    type: String,
+  },
 });
 
 module.exports = User = mongoose.model("user", UserSchema);
