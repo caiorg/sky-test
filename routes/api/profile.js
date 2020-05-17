@@ -93,8 +93,8 @@ router.post(
 
 // @route   GET api/profile
 // @desc    Obter todos os perfis
-// @access  Public
-router.get("/", async (req, res) => {
+// @access  Private
+router.get("/all", auth, acl, async (req, res) => {
   try {
     const profiles = await Profile.find()
       .populate("user", ["nome", "avatar"])
