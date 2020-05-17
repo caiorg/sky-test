@@ -106,10 +106,12 @@ router.post(
     check("email", "Por favor informe seu email").isEmail().normalizeEmail(),
     check("senha", "Senha é obrigatória").exists(),
   ],
-  async (req, res) => {
+  async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      const err = new Error(JSON.stringify({ errors: errors.array() }));
+      err.statusCode = 400;
+      return next(err);
     }
 
     const { email, senha } = req.body;
@@ -158,5 +160,18 @@ router.post(
     }
   }
 );
+
+// @route   POST api/user/signout
+// @desc    Autenticar usuário e obter token
+// @access  Private
+router.post("/signout", auth, async (req, res, next) => {
+  try {
+    await User.findByIdAndUpdate(req.user.id, { $unset: { token: 1 } });
+    res.json({ mensagem: "Usuário desconectado" });
+  } catch (err) {
+    console.error(err.message);
+    return next(err);
+  }
+});
 
 module.exports = router;

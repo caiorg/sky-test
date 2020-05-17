@@ -38,6 +38,7 @@ router.post(
   "/",
   [
     auth,
+    acl,
     [
       check("telefones", "Lista de telefones obrigatória").not().isEmpty(),
       check("endereco", "O endereço é obrigatório").not().isEmpty(),
@@ -106,9 +107,9 @@ router.get("/", async (req, res) => {
 });
 
 // @route   GET api/profile/user/:user_id
-// @desc    Obter o perfi do usuário pelo seu id
+// @desc    Obter o perfil do usuário pelo seu id
 // @access  Private
-router.get("/user/:user_id", auth, async (req, res, next) => {
+router.get("/user/:user_id", auth, acl, async (req, res, next) => {
   try {
     const profile = await Profile.findOne({
       user: req.params.user_id,
@@ -136,7 +137,7 @@ router.get("/user/:user_id", auth, async (req, res, next) => {
 // @route   DELETE api/profile
 // @desc    Excluir perfil e respectivo usuário
 // @access  Private
-router.delete("/", auth, async (req, res) => {
+router.delete("/", auth, acl, async (req, res) => {
   try {
     // Excluir perfil do usuário
     await Profile.findOneAndRemove({ user: req.user.id });
