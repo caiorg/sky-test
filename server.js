@@ -1,4 +1,5 @@
 const express = require("express");
+const compression = require("compression");
 const connectDb = require("./config/db");
 
 const errorMiddleware = require("./middleware/errors");
@@ -7,6 +8,9 @@ const app = express();
 
 // Conectar ao BD
 connectDb();
+
+// Utilizar compactação gzip
+app.use(compression());
 
 // Usar bodyParser
 app.use(express.json({ extended: false }));
@@ -26,7 +30,7 @@ app.all("*", (req, res, next) => {
   next(err);
 });
 
-// Inicializar middleware
+// Inicializar middleware de erro
 app.use(errorMiddleware);
 
 const PORT = process.env.PORT || 5000;
