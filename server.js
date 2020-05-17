@@ -1,6 +1,6 @@
 const express = require("express");
 const compression = require("compression");
-const connectDb = require("./config/db");
+const { connectDb } = require("./config/db");
 
 const errorMiddleware = require("./middleware/errors");
 
@@ -35,4 +35,8 @@ app.use(errorMiddleware);
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => console.log(`Servidor iniciado na porta ${PORT}`));
+let server = app.listen(PORT, () =>
+  console.log(`Servidor iniciado na porta ${PORT}`)
+);
+
+module.exports = server;

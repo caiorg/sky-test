@@ -6,7 +6,11 @@
   "scripts": {
     "start": "node server",
     "server": "nodemon --inspect server",
-    "eslint": "eslint --fix --ext .js"
+    "eslint": "eslint --fix --ext .js",
+    "test": "cross-env NODE_ENV=test PORT=4000 jest --collectCoverage --testTimeout=10000 --runInBand --detectOpenHandles",
+    "migrate": "migrate-mongo",
+    "migrate:reset": "yarn migrate down && yarn migrate up",
+    "pretest": "cross-env NODE_ENV=test yarn migrate:reset"
   },
   "author": "Caio Guimarães",
   "license": "MIT",
@@ -22,10 +26,21 @@
     "mongoose": "^5.9.14"
   },
   "devDependencies": {
+    "cross-env": "^7.0.2",
     "eslint": "^7.0.0",
     "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-jest": "^23.13.1",
     "eslint-plugin-prettier": "^3.1.3",
+    "jest": "^26.0.1",
+    "migrate-mongo": "^7.2.1",
     "nodemon": "^2.0.4",
-    "prettier": "^2.0.5"
+    "prettier": "^2.0.5",
+    "supertest": "^4.0.2"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ]
   }
 }

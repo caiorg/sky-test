@@ -12,7 +12,7 @@ const auth = require("../../middleware/auth");
 const User = require("../../models/User");
 
 // @route   GET api/users
-// @desc    Rota de teste
+// @desc    Obter dados básicos do usuário
 // @access  Private
 router.get("/", auth, async (req, res, next) => {
   try {
@@ -48,6 +48,7 @@ router.post(
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       const err = new Error(JSON.stringify({ errors: errors.array() }));
+      err.statusCode = 400;
       return next(err);
     }
 
@@ -87,7 +88,7 @@ router.post(
 
           await user.save();
 
-          res.json({ user });
+          res.status(201).json({ user });
         }
       );
     } catch (err) {
@@ -104,7 +105,7 @@ router.post(
   "/signin",
   [
     check("email", "Por favor informe seu email").isEmail().normalizeEmail(),
-    check("senha", "Senha é obrigatória").exists(),
+    check("senha", "Senha é obrigatória").not().isEmpty(),
   ],
   async (req, res, next) => {
     const errors = validationResult(req);
@@ -121,16 +122,16 @@ router.post(
 
       if (!user) {
         return res
-          .status(400)
-          .json({ errors: [{ msg: "Usuário e/ou senha inválidos" }] });
+          .status(401)
+          .json({ mensagem: "Usuário e/ou senha inválidos" });
       }
 
       const isMatch = await bcrypt.compare(senha, user.senha);
 
       if (!isMatch) {
         return res
-          .status(400)
-          .json({ errors: [{ msg: "Usuário e/ou senha inválidos" }] });
+          .status(401)
+          .json({ mensagem: "Usuário e/ou senha inválidos" });
       }
 
       const payload = {
