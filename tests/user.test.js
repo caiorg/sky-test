@@ -104,3 +104,26 @@ describe("Signout Route", () => {
     expect(res.body).toHaveProperty("mensagem", String("Usuário desconectado"));
   });
 });
+
+describe("User Route", () => {
+  let token = "";
+  beforeAll(async () => {
+    const res = await request(app).post("/api/user/signin").send({
+      email: userData.email,
+      senha: userData.senha,
+    });
+
+    if (res.statusCode === 200) {
+      token = res.body.user.token;
+    }
+  });
+
+  it("should return user's data", async () => {
+    const res = await request(app)
+      .get("/api/user")
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(res.statusCode).toEqual(200);
+    expect(res.body).toHaveProperty("_id");
+  });
+});
