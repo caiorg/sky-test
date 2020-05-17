@@ -62,7 +62,7 @@ router.post(
 
       const salt = await bcrypt.genSalt(10);
 
-      user = new User({ nome, email, senha, avatar });
+      const user = new User({ nome, email, senha, avatar });
 
       user.senha = await bcrypt.hash(senha, salt);
       user.data_atualizacao = Date.now();
