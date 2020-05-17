@@ -43,6 +43,10 @@ const ProfileSchema = new mongoose.Schema({
   endereco: {
     type: AddressSchema,
   },
+  papel: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "role",
+  },
   data_criacao: {
     type: Date,
     default: Date.now,

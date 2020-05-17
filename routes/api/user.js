@@ -4,32 +4,23 @@ const gravatar = require("gravatar");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require("config");
-const { body, check, validationResult } = require("express-validator");
+const { body, check } = require("express-validator");
+const validationResult = require("../../config/validationResult");
 
 const auth = require("../../middleware/auth");
 
 const User = require("../../models/User");
 
-const _validationResult = validationResult.withDefaults({
-  formatter: (error) => {
-    return {
-      parametro: error.param,
-      valor: error.value,
-      mensagem: error.msg,
-    };
-  },
-});
-
 // @route   GET api/users
 // @desc    Rota de teste
 // @access  Private
-router.get("/", auth, async (req, res) => {
+router.get("/", auth, async (req, res, next) => {
   try {
     const user = await User.findById(req.user.id).select("-senha -token");
     res.json(user);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Erro no servidor");
+    return next(err);
   }
 });
 
@@ -53,10 +44,11 @@ router.post(
       min: 6,
     }),
   ],
-  async (req, res) => {
-    const errors = _validationResult(req);
+  async (req, res, next) => {
+    const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      const err = new Error(JSON.stringify({ errors: errors.array() }));
+      return next(err);
     }
 
     const { nome, email, senha } = req.body;
@@ -100,7 +92,7 @@ router.post(
       );
     } catch (err) {
       console.error(err.message);
-      res.status(500).send("Erro no servidor");
+      return next(err);
     }
   }
 );
@@ -115,7 +107,7 @@ router.post(
     check("senha", "Senha é obrigatória").exists(),
   ],
   async (req, res) => {
-    const errors = _validationResult(req);
+    const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }

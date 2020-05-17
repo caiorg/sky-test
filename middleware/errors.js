@@ -1,3 +1,5 @@
+const isValidJSONString = require("../utils/isValidJSONString");
+
 module.exports = function (err, req, res, next) {
   if (res.headersSent) {
     return next(err);
@@ -5,8 +7,10 @@ module.exports = function (err, req, res, next) {
 
   err.statusCode = err.statusCode || 500;
   err.status = err.status || "error";
+  const message = err.message || error.mensagem;
 
   res.status(err.statusCode).json({
-    mensagem: err.message || "Erro interno no servidor",
+    mensagem:
+      isValidJSONString(message) || message || "Erro interno no servidor",
   });
 };
