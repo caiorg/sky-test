@@ -17,8 +17,6 @@ API RESTful de criação de sing up/sign in e controle de acesso por lista
   11. **.editorconfig** - padronização de configuração de editores (IDEs)
   12. **cross-env** - definição de variáveis de ambiente independente de sistema operacional
 
----
-
 ## Scripts executáveis
 
   Para executar cada script abaixo, você precisará do [Yarn](https://yarnpkg.com/).
@@ -32,8 +30,6 @@ API RESTful de criação de sing up/sign in e controle de acesso por lista
   6. `migrate` - executa o comando `migrate-mongo` (necessário utilizar parâmetros)
   7. `migrate:reset` - reinicializa o banco de dados de testes via *migrations*
   8. `pretest` - executado automaticamente antes do script `test`
-
----
 
 ## Endpoints
 
