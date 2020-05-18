@@ -11,7 +11,7 @@ const auth = require("../../middleware/auth");
 
 const User = require("../../models/User");
 
-// @route   GET api/users
+// @route   GET api/user
 // @desc    Obter dados básicos do usuário
 // @access  Private
 router.get("/", auth, async (req, res, next) => {
@@ -163,7 +163,7 @@ router.post(
 );
 
 // @route   POST api/user/signout
-// @desc    Autenticar usuário e obter token
+// @desc    Desconectar usuário
 // @access  Private
 router.post("/signout", auth, async (req, res, next) => {
   try {

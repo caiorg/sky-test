@@ -92,7 +92,7 @@ router.post(
   }
 );
 
-// @route   GET api/profile
+// @route   GET api/profile/all
 // @desc    Obter todos os perfis
 // @access  Private
 router.get("/all", auth, acl, async (req, res) => {
