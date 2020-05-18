@@ -4,17 +4,18 @@ API RESTful de criação de sing up/sign in e controle de acesso por lista
 
 ## Recursos utilizados
 
-  1. **MongoDB** - banco de dados nosql
-  2. **bcrypt** - criptografia de senha não reversível
-  3. **JWT** - token de seção
-  4. **Express** - framework Node.JS
-  5. **Nodemon** - reinicialização da api a cada mudança
-  6. **Jest** - testes unitários e cobertura de código
-  7. **ESLint** - identificação de padrões problemáticos presentes no código
-  8. **Prettier** - formatação o código de modo a manter um padrão estético
-  9. **Yarn** - gerenciador de pacotes
-  10. **.editorconfig** - padronização de configuração de editores (IDEs)
-  11. **cross-env** - definição de variáveis de ambiente independente de sistema operacional
+  1. **NodeJS** - JavaScript runtime
+  2. **MongoDB** - banco de dados nosql
+  3. **bcrypt** - criptografia de senha não reversível
+  4. **JWT** - token de seção
+  5. **Express** - framework Node.JS
+  6. **Nodemon** - reinicialização da api a cada mudança
+  7. **Jest** - testes unitários e cobertura de código
+  8. **ESLint** - identificação de padrões problemáticos presentes no código
+  9. **Prettier** - formatação o código de modo a manter um padrão estético
+  10. **Yarn** - gerenciador de pacotes
+  11. **.editorconfig** - padronização de configuração de editores (IDEs)
+  12. **cross-env** - definição de variáveis de ambiente independente de sistema operacional
 
 ---
 
