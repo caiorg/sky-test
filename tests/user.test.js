@@ -2,10 +2,8 @@ const request = require("supertest");
 const app = require("../server");
 const { closeDb } = require("../config/db");
 
-afterAll(async () => {
-  await app.close();
-  await closeDb();
-});
+const User = require("../models/User");
+const Profile = require("../models/Profile");
 
 const userData = {
   nome: "Fulano de Tal",
@@ -13,13 +11,17 @@ const userData = {
   senha: "123456",
 };
 
+afterAll(async () => {
+  await User.deleteMany({});
+  await Profile.deleteMany({});
+
+  await app.close();
+  await closeDb();
+});
+
 describe("Signup Route", () => {
   it("should create a new user", async () => {
-    const res = await request(app).post("/api/user/signup").send({
-      nome: "Fulano de Tal",
-      email: "fulanodetal@gmail.com",
-      senha: "123456",
-    });
+    const res = await request(app).post("/api/user/signup").send(userData);
 
     expect(res.statusCode).toEqual(201);
     expect(res.body).toHaveProperty("user");

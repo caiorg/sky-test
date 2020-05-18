@@ -6,8 +6,9 @@
   "scripts": {
     "start": "node server",
     "server": "nodemon --inspect server",
+    "server:test": "cross-env NODE_ENV=test PORT=4000 nodemon --inspect server",
     "eslint": "eslint --fix --ext .js",
-    "test": "cross-env NODE_ENV=test PORT=4000 jest --collectCoverage --testTimeout=10000 --runInBand --detectOpenHandles",
+    "test": "cross-env NODE_ENV=test PORT=4000 jest --no-cache --collectCoverage --testTimeout=10000 --detectOpenHandles",
     "migrate": "migrate-mongo",
     "migrate:reset": "yarn migrate down && yarn migrate up",
     "pretest": "cross-env NODE_ENV=test yarn migrate:reset"

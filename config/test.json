@@ -1,6 +1,6 @@
 {
   "mongoURI": "mongodb+srv://skynet:roma0831@sky-test-brulx.mongodb.net/test?retryWrites=true&w=majority",
   "jwtSecret": "4604be1c4251a76edc8d9ee27c8f6ae0",
-  "jwtExpiresIn": 1300,
+  "jwtExpiresIn": 3600,
   "defaultRole": "user"
 }

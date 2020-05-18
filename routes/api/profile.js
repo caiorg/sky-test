@@ -3,7 +3,8 @@ const router = express.Router();
 const config = require("config");
 const auth = require("../../middleware/auth");
 const acl = require("../../middleware/acl");
-const { check, validationResult } = require("express-validator");
+const { check } = require("express-validator");
+const validationResult = require("../../config/validationResult");
 
 const User = require("../../models/User");
 const Profile = require("../../models/Profile");
@@ -38,7 +39,6 @@ router.post(
   "/",
   [
     auth,
-    acl,
     [
       check("telefones", "Lista de telefones obrigatória").not().isEmpty(),
       check("endereco", "O endereço é obrigatório").not().isEmpty(),
@@ -48,6 +48,7 @@ router.post(
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       const err = new Error(JSON.stringify({ errors: errors.array() }));
+      err.statusCode = 400;
       return next(err);
     }
 
@@ -83,7 +84,7 @@ router.post(
       profile = new Profile(profileFields);
       await profile.save();
 
-      res.json(profile);
+      res.status(201).json(profile);
     } catch (err) {
       console.error(err.message);
       return next(err);
@@ -145,7 +146,7 @@ router.delete("/", auth, acl, async (req, res) => {
     // Excluir usuário
     await User.findOneAndRemove({ _id: req.user.id });
 
-    res.json({ msg: "Usuário excluído" });
+    res.json({ mensagem: "Usuário excluído" });
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Erro no servidor");
